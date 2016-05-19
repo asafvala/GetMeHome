@@ -14,9 +14,21 @@ class Trip:
 
         self._stops[seq] = val
 
-    def get_duration(self):
-        start_ind = min(self._stops)
-        end_ind = max(self._stops)
+    def get_trip_duration(self):
+        return self._get_duration(min(self._stops), max(self._stops))
+
+    def get_all_durations(self):
+        durations  = []
+
+        keys = self._stops.keys().sort()
+        for ind in range(len(keys)-1):
+            durations.append(self._get_duration(keys[ind], keys[ind+1]))
+                    
+        return durations
+
+    def _get_duration(self, start_ind, end_ind):
+        # start_ind = min(self._stops)
+        # end_ind = max(self._stops)
 
         start_time = self._stops[start_ind][1]
         start_time_val = time.strptime(start_time.split(',')[0],'%H:%M:%S')
@@ -31,8 +43,8 @@ class Trip:
                                             seconds=end_time_val.tm_sec).total_seconds()
 
         duration_sec = end_time_sec-start_time_sec
-
-        return time.strftime( '%H:%M:%S', time.gmtime(duration_sec) )
+        return duration_sec
+        # return time.strftime( '%H:%M:%S', time.gmtime(duration_sec) )
 
 
     def __str__(self):
