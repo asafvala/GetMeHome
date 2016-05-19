@@ -1,18 +1,6 @@
 from collections import defaultdict
 import datetime, time
 
-
-TRIP_ID_IND = 0
-ARRIVAL_TIME_IND = 1
-DEPARTURE_TIME_IND = 2
-STOP_ID_IND = 3
-STOP_SEQUENCE_IND = 4
-PICKUP_TYPE_IND = 5
-DROP_OFF_TYPE_IND = 6
-
-# class Stop:
-    # def __init__(self, sid):
-
 class Trip:
     def __init__(self, tid):
         self._id = tid
@@ -53,27 +41,3 @@ class Trip:
             res+= "%s -> %s\n"%(str(v), str(self._stops[v]))
         res += "Trip Duration: %s"%str( self.get_duration() )
         return res
-
-
-all_trips = {}
-def add_trip(tid, trips):
-    if tid in trips: return
-    trips[tid]  = Trip(tid)
-
-def parse_line(line, trips):
-    tid = line.split(",")[0]
-    add_trip(tid, trips)
-    trips[tid].add_stop(line)
-
-start = time.clock()
-
-with open("stop_times.txt",'r') as f:
-    for line in f.readlines()[1:]:
-        parse_line(line,all_trips)
-
-ttl  = time.clock() - start
-print time.strftime( '%H:%M:%S', time.gmtime(ttl) )
-
-# for trip in all_trips:
-    # print all_trips[trip]
-#
