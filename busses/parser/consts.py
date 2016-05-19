@@ -5,3 +5,7 @@ STOP_ID_IND = 3
 STOP_SEQUENCE_IND = 4
 PICKUP_TYPE_IND = 5
 DROP_OFF_TYPE_IND = 6
+
+ROUTES_FILE_NAME = "routes.txt"
+STOPS_FILE_NAME = "stops.txt"
+STOP_TIME_FILE_NAME = "stop_time.txt"
