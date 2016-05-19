@@ -1,5 +1,6 @@
 from collections import defaultdict
 import datetime, time
+from parser import consts
 
 class Trip:
     def __init__(self, tid):
@@ -8,9 +9,10 @@ class Trip:
 
     def add_stop(self, line):
         line = line.split(",")
-        sid = int( line[STOP_ID_IND] )
-        seq = int ( line[STOP_SEQUENCE_IND] )
-        val = (sid, line[DEPARTURE_TIME_IND], line[ARRIVAL_TIME_IND])
+        sid = int( line[consts.StopTimesIndeces.STOP_ID_IND] )
+        seq = int ( line[consts.StopTimesIndeces.STOP_SEQUENCE_IND] )
+        val = (sid, line[consts.StopTimesIndeces.DEPARTURE_TIME_IND],
+                    line[consts.StopTimesIndeces.ARRIVAL_TIME_IND])
 
         self._stops[seq] = val
 
@@ -23,7 +25,7 @@ class Trip:
         keys = self._stops.keys().sort()
         for ind in range(len(keys)-1):
             durations.append(self._get_duration(keys[ind], keys[ind+1]))
-                    
+
         return durations
 
     def _get_duration(self, start_ind, end_ind):

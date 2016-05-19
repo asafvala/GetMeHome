@@ -5,7 +5,8 @@ import settings
 import consts
 import pandas
 
-from parser.objects import *
+from parser.objects.stop import Stop
+from parser.objects.trip import Trip
 
 class Parser:
     def __init__(self, trips_file, stops_file, routes_file = None):
@@ -73,7 +74,7 @@ class UpdateDB(BaseCommand):
         with open(trips_fname,'r') as f:
             for line in f.readlines()[1:]:
                 # print line
-                Parser.parse_trip_line(line)
+                parser_obj.parse_trip_line(line)
 
         ttl  = time.clock() - start
         print time.strftime( '%H:%M:%S', time.gmtime(ttl) )
