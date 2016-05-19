@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+BUS_DATA_DIR = "../data"
+
 
 # Application definition
 
