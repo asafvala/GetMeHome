@@ -7,14 +7,17 @@ import pandas
 
 from parser.objects.stop import Stop, StopsParser
 from parser.objects.trip import Trip, TripsParser
+from parser.objects.agency import Agency, AgencyParser
 
 class Parser:
     def __init__(self):
         self._trips_parser = TripsParser()
         self._stops_parser = StopsParser()
+        self._agencies_parser = AgencyParser()
         self._routes = {}
         self._trips = {}
         self._stops = {}
+        self._agencies = {}
 
     def parse(self):
         # Parse trips first
@@ -26,13 +29,16 @@ class Parser:
     def init(self):
         trips_file = consts.FileNames.get_trips_name()
         stops_file = consts.FileNames.get_stops_name()
+        agencies_file = const.FileNames.get_agencies_name()
         routes_file = None
 
         self._trips_parser.parse(trips_file)
         self._stops_parser.parse(stops_file)
+        self._agencies_parser.parse(agencies_file)
+
         self._trips = self._trips_parser.get()
         self._stops = self._stops_parser.get()
-
+        self._agencies = self._agencies_parser.get()
         if routes_file:
             self._add_all_routes(routes_file)
 

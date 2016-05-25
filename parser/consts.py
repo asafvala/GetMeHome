@@ -9,10 +9,15 @@ class StopTimesIndeces:
     PICKUP_TYPE_IND = 5
     DROP_OFF_TYPE_IND = 6
 
+class AgenciesIndeces:
+    AGENCY_ID = 0
+    AGENCY_NAME  = 1
+
 class FileNames:
     ROUTES = "routes.txt"
     STOPS = "stops.txt"
     STOP_TIME = "stop_times.txt"
+    AGENCIES  = "agency.txt"
 
     @staticmethod
     def get_routes_name():
@@ -25,6 +30,10 @@ class FileNames:
     @staticmethod
     def get_trips_name():
         return settings.BUS_DATA_DIR+"/"+FileNames.STOP_TIME
+
+    @staticmethod
+    def get_agencies_name():
+        return settings.BUS_DATA_DIR+"/"+FileNames.ROUTES
 
 class StopsFileHeaders:
     STOP_ID = u'stop_id'
