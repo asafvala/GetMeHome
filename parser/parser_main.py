@@ -5,58 +5,50 @@ import settings
 import consts
 import pandas
 
-from parser.objects.stop import Stop
-from parser.objects.trip import Trip
+from parser.objects.stop import Stop, StopsParser
+from parser.objects.trip import Trip, TripsParser
 
 class Parser:
-    def __init__(self, trips_file, stops_file, routes_file = None):
+    def __init__(self):
+        self._trips_parser = TripsParser()
+        self._stops_parser = StopsParser()
+        self._routes = {}
         self._trips = {}
         self._stops = {}
-        self._routes = {}
-        self._init_all_trips(trips_file)
-        self._init_all_stops(stops_file)
+
+    def parse(self):
+        # Parse trips first
+        with open(consts.FileNames.get_trips_name(),'r') as f:
+            next(f)
+            for line in f:
+                self._parse_trip_line(line)
+
+    def init(self):
+        trips_file = consts.FileNames.get_trips_name()
+        stops_file = consts.FileNames.get_stops_name()
+        routes_file = None
+
+        self._trips_parser.parse(trips_file)
+        self._stops_parser.parse(stops_file)
+        self._trips = self._trips_parser.get()
+        self._stops = self._stops_parser.get()
+
         if routes_file:
             self._add_all_routes(routes_file)
 
-    def _init_all_trips(self, fname):
-        with open(fname, 'r') as f:
-            first = True
-            for line in f:
-                if first: first = False; continue
-                tid = line.split(",")[0]
-                self._init_trip(tid)
+    # def _init_all_routes(self, fname):
+    #     f = pandas.read_csv(fname)
+    #     num_stops = len(f[consts.STOP_ROUTE_ID_HEADER])
+    #
+    #     for stop_ind in range(num_stops):
+    #         # we only do bus routes for now
+    #         if f[consts.RoutesFileHeaders.ROUTE_TYPE][stop_ind] == \
+    #                         consts.RoutesFileHeaders.BUS_TYPE_VAL:
+    #             rid = f[consts.RoutesFileHeaders.ROUTE_ID][stop_ind]
+    #
+    #             # self._routes[  ]
 
-    def _init_all_stops(self, fname):
-        f = pandas.read_csv(fname)
-        num_stops = len(f[consts.StopsFileHeaders.STOP_ID])
-
-        for stop_ind in range(num_stops):
-            sid = f[consts.StopsFileHeaders.STOP_ID][stop_ind]
-            scode = f[consts.StopsFileHeaders.STOP_CODE][stop_ind]
-
-            self._init_stop(sid,scode)
-
-    def _init_all_routes(self, fname):
-        f = pandas.read_csv(fname)
-        num_stops = len(f[consts.STOP_ROUTE_ID_HEADER])
-
-        for stop_ind in range(num_stops):
-            # we only do bus routes for now
-            if f[consts.RoutesFileHeaders.ROUTE_TYPE][stop_ind] == \
-                            consts.RoutesFileHeaders.BUS_TYPE_VAL:
-                rid = f[consts.RoutesFileHeaders.ROUTE_ID][stop_ind]
-
-                # self._routes[  ]
-
-    def _init_stop(self, sid, scode):
-        if sid in self._trips: return
-        self._stops[sid] = Stop(sid, scode)
-
-    def _init_trip(self, tid):
-        if tid in self._trips: return
-        self._trips[tid] = Trip(tid)
-
-    def parse_trip_line(self, line):
+    def _parse_trip_line(self, line):
         tid = line.split(",")[0]
 
         # This will add a trip if needed
@@ -67,14 +59,10 @@ class UpdateDB(BaseCommand):
 
     def handle(self, *args, **options):
         start = time.clock()
-        trips_fname = settings.BUS_DATA_DIR+"/"+consts.FileNames.STOP_TIME
-        stops_fname = settings.BUS_DATA_DIR+"/"+consts.FileNames.STOPS
 
-        parser_obj = Parser(trips_fname,stops_fname)
-        with open(trips_fname,'r') as f:
-            for line in f.readlines()[1:]:
-                # print line
-                parser_obj.parse_trip_line(line)
+        parser_obj = Parser()
+        parser_obj.init()
+        parser_obj.parse()
 
         ttl  = time.clock() - start
         print time.strftime( '%H:%M:%S', time.gmtime(ttl) )

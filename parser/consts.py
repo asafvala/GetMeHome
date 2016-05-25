@@ -1,3 +1,5 @@
+import settings
+
 class StopTimesIndeces:
     TRIP_ID_IND = 0
     ARRIVAL_TIME_IND = 1
@@ -12,6 +14,17 @@ class FileNames:
     STOPS = "stops.txt"
     STOP_TIME = "stop_times.txt"
 
+    @staticmethod
+    def get_routes_name():
+        return settings.BUS_DATA_DIR+"/"+FileNames.ROUTES
+
+    @staticmethod
+    def get_stops_name():
+        return settings.BUS_DATA_DIR+"/"+FileNames.STOPS
+
+    @staticmethod
+    def get_trips_name():
+        return settings.BUS_DATA_DIR+"/"+FileNames.STOP_TIME
 
 class StopsFileHeaders:
     STOP_ID = u'stop_id'

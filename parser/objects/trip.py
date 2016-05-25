@@ -55,3 +55,25 @@ class Trip:
             res+= "%s -> %s\n"%(str(v), str(self._stops[v]))
         res += "Trip Duration: %s"%str( self.get_duration() )
         return res
+
+class TripsParser:
+    def __init__(self):
+        self._trips = {}
+
+    def _init_all_trips(self, fname):
+        with open(fname, 'r') as f:
+            first = True
+            for line in f:
+                if first: first = False; continue
+                tid = line.split(",")[0]
+                self._init_trip(tid)
+
+    def _init_trip(self, tid):
+        if tid in self._trips: return
+        self._trips[tid] = Trip(tid)
+
+    def parse(self, stops_file):
+        self._init_all_trips(stops_file)
+
+    def get(self):
+        return self._trips
