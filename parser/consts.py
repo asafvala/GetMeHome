@@ -18,6 +18,7 @@ class FileNames:
     STOPS = "stops.txt"
     STOP_TIME = "stop_times.txt"
     AGENCIES  = "agency.txt"
+    CALENDAR = "calendar.txt"
 
     @staticmethod
     def get_routes_name():
@@ -34,6 +35,10 @@ class FileNames:
     @staticmethod
     def get_agencies_name():
         return settings.BUS_DATA_DIR+"/"+FileNames.ROUTES
+
+    @staticmethod
+    def get_calendar_name():
+        return settings.BUS_DATA_DIR+"/"+FileNames.CALENDAR
 
 class StopsFileHeaders:
     STOP_ID = u'stop_id'

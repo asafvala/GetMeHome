@@ -62,9 +62,8 @@ class TripsParser:
 
     def _init_all_trips(self, fname):
         with open(fname, 'r') as f:
-            first = True
+            next(f)
             for line in f:
-                if first: first = False; continue
                 tid = line.split(",")[0]
                 self._init_trip(tid)
 

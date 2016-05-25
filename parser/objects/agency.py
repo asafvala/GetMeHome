@@ -5,7 +5,7 @@ from parser import consts
 class Agency:
 
     def __init__(self,aid,name):
-        self._aid = aid
+        self._aid = int(aid)
         self._name = name
 
     def get_name(self):
@@ -13,6 +13,9 @@ class Agency:
 
     def get_id(self):
         return self._id
+
+    def __str__(self):
+        return "NAME: %s [AID: %d]"%(self._name, self._aid)
 
 class AgencyParser:
     def __init__(self):
@@ -23,8 +26,8 @@ class AgencyParser:
             next(f)
             for line in f:
                 splitted = line.split(",")
-                aid = splitted[const.AgenciesIndeces.AGENCY_ID]
-                name = splitted[const.AgenciesIndeces.AGENCY_NAME]
+                aid = splitted[consts.AgenciesIndeces.AGENCY_ID]
+                name = splitted[consts.AgenciesIndeces.AGENCY_NAME]
                 self._init_agency(aid, name)
 
     def _init_agency(self, aid, name):
