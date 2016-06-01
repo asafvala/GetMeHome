@@ -39,8 +39,7 @@ class Parser:
         self._stops = self._stops_parser.get()
         self._agencies = self._agencies_parser.get()
         self._services = self._services_parser.get()
-
-
+        
 
     def _parse_trip_line(self, line):
         tid = line.split(",")[0]

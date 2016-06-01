@@ -1,5 +1,5 @@
 import pandas as pd
-import consts
+from parser import consts
 
 class Route:
     def __init__(self, rid,operator,rtype,rname,route_desc,rcolor):
@@ -21,6 +21,13 @@ class MetaRoute:
     def add_option(self, rid, route_desc):
         self._options.append( (rid,route_desc)  )
 
+    def get_options(self):
+        return self._options
+
+    @staticmethod
+    def parse_description(desc):
+        return desc.split("-")
+
 
 class RoutesParser:
 
@@ -30,12 +37,12 @@ class RoutesParser:
 
     def _init_route(self, rid, operator, rtype, rname, route_desc, rcolor):
         if rid not in self._routes:
-            self._routes[rnmae] = Route(rid,operator,rtype,rname,route_desc,rcolor)
+            self._routes[rid] = Route(rid,operator,rtype,rname,route_desc,rcolor)
 
         if rname in self._meta_routes:
             self._meta_routes[rname].add_option(rid,route_desc)
         else:
-            self._meta_routes[rnmae] = Route(rid,operator,rtype,rname,route_desc,rcolor)
+            self._meta_routes[rname] = MetaRoute(rid,operator,rtype,rname,route_desc,rcolor)
 
     def parse(self, routes_file):
         self._init_all_routes(routes_file)
@@ -51,6 +58,7 @@ class RoutesParser:
             # we only do bus routes for now
             if f[consts.RoutesFileHeaders.ROUTE_TYPE][route_ind] == \
                             consts.RoutesFileHeaders.BUS_TYPE_VAL:
+
                 rid = f[consts.RoutesFileHeaders.ROUTE_ID][route_ind]
                 operator = f[consts.RoutesFileHeaders.AGENCY_ID][route_ind]
                 rtype = f[consts.RoutesFileHeaders.ROUTE_TYPE][route_ind]
