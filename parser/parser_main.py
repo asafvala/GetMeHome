@@ -9,6 +9,7 @@ from parser.objects.stop import Stop, StopsParser
 from parser.objects.trip import Trip, TripsParser
 from parser.objects.agency import Agency, AgencyParser
 from parser.objects.calendar import Service, SerivcesParser
+from parser.objects.routes import Route, RoutesParser
 
 class Parser:
     def __init__(self):
@@ -16,6 +17,7 @@ class Parser:
         self._stops_parser = StopsParser()
         self._agencies_parser = AgencyParser()
         self._services_parser = SerivcesParser()
+        self._routes_parser = RoutesParser()
 
     def parse(self):
         # Parse trips first
@@ -31,26 +33,14 @@ class Parser:
         self._stops_parser.parse( consts.FileNames.get_stops_name() )
         self._agencies_parser.parse( consts.FileNames.get_agencies_name() )
         self._services_parser.parse( consts.FileNames.get_calendar_name() )
+        self._routes_parser.parse( consts.FileNames.get_routes_name() )
 
         self._trips = self._trips_parser.get()
         self._stops = self._stops_parser.get()
         self._agencies = self._agencies_parser.get()
         self._services = self._services_parser.get()
-        print self._agencies
-        if routes_file:
-            self._add_all_routes(routes_file)
 
-    # def _init_all_routes(self, fname):
-    #     f = pandas.read_csv(fname)
-    #     num_stops = len(f[consts.STOP_ROUTE_ID_HEADER])
-    #
-    #     for stop_ind in range(num_stops):
-    #         # we only do bus routes for now
-    #         if f[consts.RoutesFileHeaders.ROUTE_TYPE][stop_ind] == \
-    #                         consts.RoutesFileHeaders.BUS_TYPE_VAL:
-    #             rid = f[consts.RoutesFileHeaders.ROUTE_ID][stop_ind]
-    #
-    #             # self._routes[  ]
+
 
     def _parse_trip_line(self, line):
         tid = line.split(",")[0]
